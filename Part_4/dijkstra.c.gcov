@@ -1,0 +1,101 @@
+        -:    0:Source:dijkstra.c
+        -:    0:Graph:dijkstra.gcno
+        -:    0:Data:dijkstra.gcda
+        -:    0:Runs:4
+        -:    1:#include <stdio.h>
+        -:    2:#include <limits.h>
+        -:    3:#include <stdbool.h>
+        -:    4:#include <stdlib.h>
+        -:    5:#include <string.h>
+        -:    6:
+        -:    7:#define V 9
+        -:    8:
+        8:    9:int minDistance(int dist[], bool sptSet[]) {
+        8:   10:    int min = INT_MAX, min_index = -1;
+        -:   11:
+       80:   12:    for (int v = 0; v < V; v++)
+       72:   13:        if (!sptSet[v] && dist[v] <= min)
+       12:   14:            min = dist[v], min_index = v;
+        -:   15:
+        8:   16:    return min_index;
+        -:   17:}
+        -:   18:
+        1:   19:void printSolution(int dist[]) {
+        1:   20:    printf("Vertex \t Distance from Source\n");
+       10:   21:    for (int i = 0; i < V; i++)
+        9:   22:        printf("%d \t %d\n", i, dist[i]);
+        1:   23:}
+        -:   24:
+        1:   25:void dijkstra(int graph[V][V], int src) {
+        -:   26:    int dist[V];
+        -:   27:    bool sptSet[V];
+        -:   28:
+       10:   29:    for (int i = 0; i < V; i++)
+        9:   30:        dist[i] = INT_MAX, sptSet[i] = false;
+        -:   31:
+        1:   32:    dist[src] = 0;
+        -:   33:
+        9:   34:    for (int count = 0; count < V - 1; count++) {
+        8:   35:        int u = minDistance(dist, sptSet);
+       8*:   36:        if (u == -1) break;
+        8:   37:        sptSet[u] = true;
+        -:   38:
+       80:   39:        for (int v = 0; v < V; v++) {
+       72:   40:            if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX &&
+       14:   41:                dist[u] + graph[u][v] < dist[v]) {
+       10:   42:                dist[v] = dist[u] + graph[u][v];
+        -:   43:            }
+        -:   44:        }
+        -:   45:    }
+        -:   46:
+        1:   47:    printSolution(dist);
+        1:   48:}
+        -:   49:
+        4:   50:int main() {
+        1:   51:    for (;;) {
+        -:   52:        int graph[V][V];
+        5:   53:        bool valid = true;
+        -:   54:        char buffer[256];
+        -:   55:
+        5:   56:        printf("enter a 9x9 adjacency matrix (0 to quit):\n");
+        -:   57:
+       18:   58:        for (int i = 0; i < V && valid; i++) {
+       17:   59:            if (!fgets(buffer, sizeof(buffer), stdin)) {
+        1:   60:                valid = false;
+        1:   61:                break;
+        -:   62:            }
+        -:   63:
+       16:   64:            int count = 0;
+       16:   65:            char *token = strtok(buffer, " \t\n");
+      154:   66:            while (token && count < V) {
+      139:   67:                int val = atoi(token);
+      139:   68:                if (val < 0) {
+        1:   69:                    printf("invalid input: negative edge detected\n");
+        1:   70:                    valid = false;
+        1:   71:                    break;
+        -:   72:                }
+      138:   73:                graph[i][count++] = val;
+      138:   74:                token = strtok(NULL, " \t\n");
+        -:   75:            }
+       16:   76:            if(!valid) break;
+       15:   77:            if (count < V) {
+        1:   78:                printf("too few values in row %d.\n", i + 1);
+        1:   79:                valid = false;
+        1:   80:                break;
+       14:   81:            } else if (token != NULL) {
+        1:   82:                printf("too many values in row %d.\n", i + 1);
+        1:   83:                valid = false;
+        1:   84:                break;
+        -:   85:            }
+        -:   86:        }
+        -:   87:
+        5:   88:        if (!valid) {
+        4:   89:            break;
+        -:   90:        }
+        -:   91:
+        1:   92:        dijkstra(graph, 0);
+        1:   93:        printf("\n");
+        -:   94:    }
+        -:   95:
+        4:   96:    return 0;
+        -:   97:}
