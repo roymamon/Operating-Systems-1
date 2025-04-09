@@ -14,7 +14,7 @@ int* generate_array(int size, unsigned int seed) {
     }
     return arr;
 }
-
+//brute force
 int max_subarray_n3(int* arr, int size) {
     int max_sum = INT_MIN;
     for (int i = 0; i < size; i++) {
@@ -28,7 +28,7 @@ int max_subarray_n3(int* arr, int size) {
     }
     return max_sum;
 }
-
+//better bruteforce
 int max_subarray_n2(int* arr, int size) {
     int max_sum = INT_MIN;
     for (int i = 0; i < size; i++) {
@@ -40,7 +40,7 @@ int max_subarray_n2(int* arr, int size) {
     }
     return max_sum;
 }
-
+//kadanes algorithm
 int max_subarray_n(int* arr, int size) {
     int max_sum = arr[0];
     int current_sum = arr[0];
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
         fprintf(stderr, "usage: %s <seed> <size>\n", argv[0]);
         return 1;
     }
-
+    //atoi converts string to integer
     unsigned int seed = atoi(argv[1]);
     int size = atoi(argv[2]);
 
