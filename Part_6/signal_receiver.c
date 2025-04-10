@@ -3,12 +3,13 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-
+//global variables that may change during the program
 volatile sig_atomic_t current_bit = 0;
 volatile sig_atomic_t received_number = 0;
 
 void handle_bit(int sig) {
     received_number <<= 1;
+    //sets last bit to 1
     if (sig == SIGUSR2)
         received_number |= 1;
     current_bit++;
@@ -31,7 +32,7 @@ int main() {
 
     sigaction(SIGUSR1, &sa, NULL);
     sigaction(SIGUSR2, &sa, NULL);
-    //waits for signals using(instead of sleep)
+    //waits for signals(instead of sleep)
     while (1) {
         pause();
     }
