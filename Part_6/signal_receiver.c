@@ -21,7 +21,7 @@ void handle_bit(int sig) {
 
 int main() {
     printf("My PID is %d\n", getpid());
-
+    //signal mask to prevent handler interruption
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
     sa.sa_handler = handle_bit;
@@ -31,7 +31,7 @@ int main() {
 
     sigaction(SIGUSR1, &sa, NULL);
     sigaction(SIGUSR2, &sa, NULL);
-
+    //waits for signals using(instead of sleep)
     while (1) {
         pause();
     }
