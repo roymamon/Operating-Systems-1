@@ -10,14 +10,14 @@ int main() {
     char buffer[BUF_SIZE];
     ssize_t bytes_read;
 
-    //read from standard input
+    //read using system call
     bytes_read = read(STDIN_FILENO, buffer, BUF_SIZE);
     if (bytes_read <= 0) {
         write(STDERR_FILENO, "Failed to read input\n", 23);
         return 1;
     }
 
-    //open phonebook file for appending (create if doesn't exist)
+    //write only, create, append
     int fd = open(PHONEBOOK_FILE, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (fd < 0) {
         write(STDERR_FILENO, "Failed to open phonebook file\n", 31);
